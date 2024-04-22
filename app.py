@@ -3,27 +3,28 @@ import pickle
 
 app = Flask(__name__)
 
-#Load the trained model
+# Load the recommendation function from the pickle file
 with open('svd.pkl', 'rb') as file:
-    svd_model = pickle.load(file)
+    recommend_movies = pickle.load(file)
 
-#Define a route for rendering the form
+# Define a route for rendering the form
 @app.route('/', methods=['GET'])
 def home():
     return render_template('index.html')
 
-#Define a route for making predictions
+# Define a route for making predictions
 @app.route('/predict', methods=['POST'])
 def predict():
-    data = request.json
-    user_id = data['user_id']
-    movie_id = data['movie_id']
+    ratings = {}
+    for key, value in request.form.items():
+        if key.startswith('rating'):
+            ratings[key] = float(value)
     
-    #Make predictions using the loaded model
-    prediction = svd_model.predict(user_id, movie_id)
+    # Assuming you have a function to generate recommendations based on ratings
+    recommendations = recommend_movies(ratings)
     
-    #Return the prediction as JSON
-    return jsonify({'user_id': user_id, 'movie_id': movie_id, 'predicted_rating': prediction})
+    return render_template('recommendations.html', recommendations=recommendations)
 
 if __name__ == '__main__':
     app.run(debug=True)
+
