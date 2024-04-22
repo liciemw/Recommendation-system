@@ -4,7 +4,7 @@ import pickle
 app = Flask(__name__)
 
 # Load the trained model
-with open('svd_model.pkl', 'rb') as file:
+with open('svd.pkl', 'rb') as file:
     svd_model = pickle.load(file)
 
 # Define a route for making predictions
