@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify
 import pickle
 
-app = Flask(__Recommendationsys__)
+app = Flask(__name__)
 
 # Load the trained model
 with open('svd_model.pkl', 'rb') as file:
