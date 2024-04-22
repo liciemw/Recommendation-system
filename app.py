@@ -1,30 +1,29 @@
-from flask import Flask, jsonify, request
+from flask import Flask, request, jsonify, render_template
 import pickle
 
 app = Flask(__name__)
 
-# Load the trained model
+#Load the trained model
 with open('svd.pkl', 'rb') as file:
     svd_model = pickle.load(file)
 
-# Define a route for the root URL
+#Define a route for rendering the form
 @app.route('/', methods=['GET'])
-def index():
-    return "Welcome to the Movie Recommendation System!"
+def home():
+    return render_template('index.html')
 
-# Define a route for making predictions
+#Define a route for making predictions
 @app.route('/predict', methods=['POST'])
 def predict():
     data = request.json
     user_id = data['user_id']
     movie_id = data['movie_id']
     
-    # Make predictions using the loaded model
+    #Make predictions using the loaded model
     prediction = svd_model.predict(user_id, movie_id)
     
-    # Return the prediction as JSON
+    #Return the prediction as JSON
     return jsonify({'user_id': user_id, 'movie_id': movie_id, 'predicted_rating': prediction})
 
 if __name__ == '__main__':
     app.run(debug=True)
-
