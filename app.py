@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, jsonify, request
 import pickle
 
 app = Flask(__name__)
@@ -6,6 +6,11 @@ app = Flask(__name__)
 # Load the trained model
 with open('svd.pkl', 'rb') as file:
     svd_model = pickle.load(file)
+
+# Define a route for the root URL
+@app.route('/', methods=['GET'])
+def index():
+    return "Welcome to the Movie Recommendation System!"
 
 # Define a route for making predictions
 @app.route('/predict', methods=['POST'])
@@ -22,3 +27,4 @@ def predict():
 
 if __name__ == '__main__':
     app.run(debug=True)
+
